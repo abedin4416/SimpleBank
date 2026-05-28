@@ -23,6 +23,7 @@ int main(int argc, char *argv[]){
             cout << "Balance: " << get("money");
             cout << "\n1. Send  2. Change Password\n";
             cin >> input;
+            //input 1 send
             if(input == "2"){
                 newPassword();
                 data.SaveFile(DATA);
