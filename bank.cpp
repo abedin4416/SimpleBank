@@ -1,46 +1,98 @@
-#include<iostream>
-#include "Simpleini.h"
+#include<bits/stdc++.h>
+#include "json.hpp"
 using namespace std;
-using cc = const char*;
-using cs = CSimpleIniA&;
+using json = nlohmann::json;
+#define FILE "data.json"
 
-int newAccount(cs x,cc y);
-int get(cs x,cc y,cc a,cc b){return stoi(x.GetValue(y,a,b));}
+json db;
+string ID;
+string input;
+void options(const vector<string>& options);
+bool load();
+void save();
+bool exists();
+string get(string name);
+void setval(string name, string value);
+bool verified();
+void newPassword();
+void newAccount();
 
-int main(int argc, char* argv[]){
-    if(argc > 2){
-        CSimpleIniA data;
-        data.SetUnicode();
-        data.LoadFile("data.txt");
-        string cmd = argv[2];
-        bool no_acc = data.GetSection(argv[1]) == nullptr;
-        if(cmd == "new") newAccount(data, argv[1]);
-        else if(cmd == "send"){
-            if(argc == 5){
-                bool no_recipient = data.GetSection(argv[4]) == nullptr;
-                if(no_acc||no_recipient){
-                    cout << "Please enter valid account\n";
-                }
-                else {
-                    int sf=get(data,argv[1],"money","0");
-                    int rf=get(data,argv[4],"money","0");
-                    int ra=stoi(argv[3]);
-                    string se=to_string(sf-ra);
-                    string re=to_string(rf+ra);
-                    if(sf>=ra){
-                        data.SetValue(argv[1],"money",se.c_str());
-                        data.SetValue(argv[4],"money",re.c_str());
-                        data.SaveFile("data.txt");
-                        cout << "Transaction successful\n";
-                    }
-                    else cout << "Transaction failed\n";
-                }
-            }
-        }
+int main(int argc, char *argv[]){
+    if(argc < 2) return 0;
+    load();
+    ID = argv[1];
+    if(!exists()){
+        newAccount(); 
+        return 0;
     }
+    if(!verified()){
+        cout << "Wrong password.";
+        return 0;
+    }
+    cout << "Balance: " << get("money") << "\n";
+    options({"Send", "Change Password"});
+    //input 1 send
+    if(input == "2"){
+        newPassword();
+        save();
+        cout << "Password changed.";
+    }
+    return 0;
+}
+void options(const vector<string>& options){
+    for(int i = 0; i < options.size(); i++){
+        cout << i + 1 << "." << options[i] << "  ";
+    }
+    cout << "\n";
+    cin >> input;
+}
+bool load(){
+    ifstream in(FILE);
+    if (in.is_open()){
+        in >> db;
+        return true;
+    }
+    db = json::object();
+    return false;
 }
 
-int newAccount(cs x,cc y){cout << "Enter a new password:";string z; cin >> z;if(x.GetSection(y)==nullptr){
-if(z!=""){x.SetValue(y,"pw",z.c_str());x.SetValue(y,"money","0");x.SaveFile("data.txt");return 0;}return 1;}return 2;}
+void save(){
+    ofstream out(FILE);
+    out << db.dump(4);
+}
 
-void sendMoney(cs x, cc y){}
+bool exists(){
+    return db.contains(ID);
+}
+
+string get(string name){
+    if(!db.contains(ID)) return "";
+    if(!db[ID].contains(name)) return "";
+    return db[ID][name].get<string>();
+}
+
+void setval(string name, string value){
+    db[ID][name] = value;
+}
+
+bool verified(){
+    cout << "Enter password: ";
+    cin >> input;
+    return get("key") == input;
+}
+
+void newPassword(){
+    cout << "Enter a new password: ";
+    cin >> input;
+    setval("key", input);
+}
+void newAccount(){
+    cout << "The Account doesn't exist\n";
+    cout << "1. Create Account" << "\n";
+    cin >> input;
+    if(input != "1") return;
+    newPassword();
+    setval("money", "0");
+    save();
+    cout << "Account created successfully.";
+}
