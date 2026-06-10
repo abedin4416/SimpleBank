@@ -3,25 +3,53 @@
 using namespace std;
 using json = nlohmann::json;
 #define FILE "data.json"
+using str = const string&;
 
 json db;
-string ID;
-string input;
-void options(const vector<string>& options);
-bool load();
-void save();
-bool exists(string id);
-string get(string id, string name);
-void setval(string id, string name, string value);
-bool verified();
-void newPassword();
-void newAccount();
+string ID, input;
+void options(const vector<string>& v){
+    for(int i = 0; i < v.size(); i++)
+        cout << i + 1 << "." << v[i] << "  ";
+    cout << "\n";
+    cin >> input;
+}
+bool load(){
+    ifstream in(FILE);
+    if(in) return (in >> db), true;
+    db = json::object();
+    return false;
+}
+void save(){
+    ofstream(FILE) << db.dump(4);
+}
+string get(str id, str name){
+    return db.value(id, json{}).value(name, "");
+}
+bool verified(){
+    cout << "Enter password: ";
+    cin >> input;
+    return get(ID, "key") == input;
+}
+void newPassword(){
+    cout << "Enter a new password: ";
+    cin >> input;
+    db[ID]["key"] = input;
+}
+void newAccount(){
+    cout << "The Account doesn't exist\n";
+    options({"Create Account"});
+    if(input != "1") return;
+    newPassword();
+    db[ID]["money"] = "0";
+    save();
+    cout << "Account created successfully.";
+}
 
 int main(int argc, char *argv[]){
     if(argc < 2) return 0;
     load();
     ID = argv[1];
-    if(!exists(ID)){
+    if(!db.contains(ID)){
         newAccount(); 
         return 0;
     }
@@ -52,60 +80,4 @@ int main(int argc, char *argv[]){
         else cout << "Account is not empty!\n";
     }
     return 0;
-}
-void options(const vector<string>& options){
-    for(int i = 0; i < options.size(); i++){
-        cout << i + 1 << "." << options[i] << "  ";
-    }
-    cout << "\n";
-    cin >> input;
-}
-bool load(){
-    ifstream in(FILE);
-    if (in.is_open()){
-        in >> db;
-        return true;
-    }
-    db = json::object();
-    return false;
-}
-
-void save(){
-    ofstream out(FILE);
-    out << db.dump(4);
-}
-
-bool exists(string id){
-    return db.contains(id);
-}
-
-string get(string id, string name){
-    if(!db.contains(id)) return "";
-    if(!db[id].contains(name)) return "";
-    return db[id][name].get<string>();
-}
-
-void setval(string id, string name, string value){
-    db[id][name] = value;
-}
-
-bool verified(){
-    cout << "Enter password: ";
-    cin >> input;
-    return get(ID, "key") == input;
-}
-
-void newPassword(){
-    cout << "Enter a new password: ";
-    cin >> input;
-    setval(ID, "key", input);
-}
-void newAccount(){
-    cout << "The Account doesn't exist\n";
-    options({"Create Account"});
-    if(input != "1") return;
-    newPassword();
-    setval(ID, "money", "0");
-    save();
-    cout << "Account created successfully.";
 }
