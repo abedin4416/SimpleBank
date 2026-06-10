@@ -1,6 +1,14 @@
 {
+    "1234": {
+        "key": "123",
+        "money": "700"
+    },
     "abcd": {
         "key": "abcd",
-        "money": "0"
+        "money": "100"
+    },
+    "xyz": {
+        "key": "xyz",
+        "money": "200"
     }
 }

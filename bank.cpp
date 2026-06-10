@@ -3,6 +3,7 @@
 using namespace std;
 using json = nlohmann::json;
 #define FILE "data.json"
+#define NOTFOUND "Account not found!\n"
 using str = const string&;
 
 json db;
@@ -36,13 +37,18 @@ void newPassword(){
     db[ID]["key"] = input;
 }
 void newAccount(){
-    cout << "The Account doesn't exist\n";
+    cout << NOTFOUND;
     options({"Create Account"});
     if(input != "1") return;
     newPassword();
     db[ID]["money"] = "0";
     save();
     cout << "Account created successfully.";
+}
+bool inputAmount(){
+    cout << "Amount: ";
+    cin >> input;
+    return stoi(get(ID, "money")) >= stoi(input)? 1:0;
 }
 
 int main(int argc, char *argv[]){
@@ -61,7 +67,25 @@ int main(int argc, char *argv[]){
     options({"Send", "Change Password", "Delete Account"});
     
     if(input == "1"){
-        //send money
+        cout << "Recipient: ";
+        cin >> input;
+        string rID = input;
+        if(!db.contains(input)){
+            cout << NOTFOUND;
+        }
+        else if(!inputAmount()){
+            cout << "Insufficient balance.\n";
+        }
+        else {
+            int amount = stoi(input);
+            int sender = stoi(get(ID, "money"));
+            int reciever = stoi(get(rID, "money"));
+            db[ID]["money"] = to_string(sender - amount);
+            db[rID]["money"] = to_string(reciever + amount);
+            save();
+            cout << "Transaction successful.\n";
+        }
+
     }
     else if(input == "2"){
         newPassword();
