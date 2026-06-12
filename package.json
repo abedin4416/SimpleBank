@@ -11,6 +11,8 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "argon2": "^0.44.0",
+    "better-sqlite3": "^12.10.0",
     "express": "^5.2.1"
   }
 }
