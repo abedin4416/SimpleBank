@@ -1,0 +1,81 @@
+@font-face{
+    font-family: 'Orbitron';
+    src: url('/Orbitron.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#title{
+    font-family: 'Orbitron', sans-serif;
+    color: rgb(100,200,200);
+}
+
+#header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+
+#info-button{
+    width: 2rem;
+    height: 2rem;
+    background-image: url('/info.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+
+#login-content{
+    display:flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.login-input{
+    width:20rem;
+    height:2.8rem;
+    padding:1rem;
+    font-size:0.9rem;
+}
+
+#user-id-input{
+    box-shadow:5px 5px 0px 1px rgb(161, 195, 255);
+    border-radius:0.3rem;
+}
+
+#password-input{
+    box-shadow: 5px 5px 0px 1px rgb(202, 171, 255);
+    border-radius: 0.3rem;
+}
+
+#login-submit{
+    width:20rem;
+    height:2.5rem;
+    font-size: 1rem;
+    background-color: rgb(100,200,200);
+    border:none;
+    border-radius: 0.3rem;
+    box-shadow: 5px 5px 0px 1px rgb(86, 170, 170);
+    color:white;
+    font-family:monospace;
+}
+
+#login-message{
+    font-family: monospace;
+    font-size: 1rem;
+    text-align: center;
+}
+
+#create-link{
+    text-decoration:none;
+}
