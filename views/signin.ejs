@@ -1,0 +1,9 @@
+<%- include('start') %>
+
+<%- include('form', {
+    title: 'Log in to your account using User ID<br>and Password or <a id="link" href="/signup">create a new one</a>',
+    type: ['text', 'password'], name: ['userID', 'password'], placeholder: ['User ID', 'Password'],
+    autocomplete: ['username', 'current-password'], submit: 'Sign In'
+}) %>
+
+<%- include('end') %>

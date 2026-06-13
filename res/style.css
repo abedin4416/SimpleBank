@@ -33,7 +33,7 @@
     cursor: pointer;
 }
 
-#login-content{
+#form{
     display:flex;
     justify-content: center;
     flex-direction: column;
@@ -41,24 +41,23 @@
     gap: 1rem;
 }
 
-.login-input{
+.form-input{
     width:20rem;
     height:2.8rem;
     padding:1rem;
     font-size:0.9rem;
-}
-
-#user-id-input{
-    box-shadow:5px 5px 0px 1px rgb(161, 195, 255);
-    border-radius:0.3rem;
-}
-
-#password-input{
-    box-shadow: 5px 5px 0px 1px rgb(202, 171, 255);
     border-radius: 0.3rem;
 }
 
-#login-submit{
+.form-input.first{
+    box-shadow:5px 5px 0px 1px rgb(161, 195, 255);
+}
+
+.form-input.second{
+    box-shadow: 5px 5px 0px 1px rgb(202, 171, 255);
+}
+
+#submit{
     width:20rem;
     height:2.5rem;
     font-size: 1rem;
@@ -69,20 +68,20 @@
     color:white;
     font-family:monospace;
 }
-#login-submit:hover{
+#submit:hover{
     background-color: rgb(120,220,220);;
 }
 
-#login-message{
+#form-title{
     font-family: monospace;
     font-size: 1rem;
     text-align: center;
 }
 
-#create-link{
+#link{
     text-decoration:none;
 }
 
-.login-input.error::placeholder{
+.form-input.error::placeholder{
     color:rgb(200,100,100);
 }

@@ -6,6 +6,8 @@ const argon2 = require('argon2');
 const app = express();
 app.use(express.json());
 
+app.set('view engine', 'ejs');
+
 const db = new Database('bank.db');
 
 db.exec(`
@@ -17,7 +19,7 @@ db.exec(`
     );
 `)
 
-app.post('/register', async (req, res) => {
+app.post('/signup', async (req, res) => {
     const {userId, password} = req.body;
 
     if (!userId || !password) {
@@ -41,7 +43,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-app.post('/login', async (req, res) => {
+app.post('/', async (req, res) => {
     const {userId, password} = req.body;
     const stmt = db.prepare(`
         SELECT * FROM users WHERE user_id = ?
@@ -69,8 +71,10 @@ app.post('/login', async (req, res) => {
         balance: user.balance
     });
 });
-app.use('/', express.static('signin'));
 app.use('/res', express.static('res'));
-app.use('/signup', express.static('signup'));
+
+app.get('/', (req, res) => res.render('signin'));
+
+app.get('/signup', (req, res) => res.render('signup'));
 
 app.listen(3000);
